@@ -9,39 +9,39 @@ param tags object = {
 }
 
 var nsgstore = '${orgprefix}${env}nsglog001'
+var workspacename = '${orgprefix}${env}nsgworkspace001'
 module loganalytics 'modules/logworkspace.bicep' = {
-  name: 
+  name: 'workspace-deployment'
   params: {
     location: location
-    name: env
+    name: workspacename
     tags: tags
   }
 }
 module nsglogstore 'modules/storage.bicep' = {
-  name: 
+  name: 'nsgstore-deploy'
   params: {
-    location: 
-    sku: 
-    storageaccountname: 
+    location: location
+    storageaccountname: nsgstore
   }
 }
 module devnsg 'modules/nsg.bicep' = {
-  name: devnsg
+  name: 'devnsg'
   params: {
-    location: 
-    nsgname: 
+    location: location
+    nsgname: 'devnsg'
     nsgrules: [
       {
         name: 'AllowTrustedHTTPS'
         properties: {
-          description: 'Allow Trusted HTTPS traffic'
+          description: 'Allow Trusted HTTP HTTPS traffic'
           access: 'Allow'
-          destinationAddressPrefixes: object.
-          destinationPortRanges: ports.
+          destinationAddressPrefixes: object.trusted
+          destinationPortRanges: union(ports.http,ports.https)
           direction: 'Inbound'
           priority: 200
           protocol: 'TCP'
-          sourceAddressPrefixes: 
+          sourceAddressPrefixes: object.untrusted
           sourcePortRange: '*'
           sourcePortRanges: []
           sourceApplicationSecurityGroups: []
@@ -49,7 +49,8 @@ module devnsg 'modules/nsg.bicep' = {
         }
       }
     ]
-    nsgstore: 
-    workspaceid: 
+    nsgstore: nsgstore
+    logAnalyticsworkspacecustid: loganalytics.outputs.custid
+    logAnalyticsWorkspaceId: loganalytics.outputs.logId
   }
 }

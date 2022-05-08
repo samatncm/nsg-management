@@ -2,7 +2,8 @@ param nsgname string
 param nsgrules array
 param location string
 param nsgstore string
-param workspaceid string
+param logAnalyticsworkspacecustid string
+
 resource storage 'Microsoft.Storage/storageAccounts@2021-08-01' existing = {
   name: nsgstore
 }
@@ -37,7 +38,7 @@ resource nsglogs 'Microsoft.Insights/diagnosticSettings@2021-05-01-preview' = {
       }
     ]
     storageAccountId: resourceId('Microsoft.Storage/storageAccounts', nsgstore)
-    workspaceId: workspaceid
+    workspaceId: logAnalyticsWorkspaceId
   }
 }
 
@@ -62,8 +63,7 @@ var existingNsgId = networkSecurityGroup.id
 var existingFlowLogStorageAccountId = storage.id
 
 @description('Log analytics workspace resource id')
-param logAnalyticsWorkspaceId string = workspaceid
-
+param logAnalyticsWorkspaceId string
 module flowLogs 'flowlogs.bicep' = {
   name: '${nsgname}deployFlowLogs'
   scope: resourceGroup(networkWatcherResourceGroup)
@@ -74,5 +74,6 @@ module flowLogs 'flowlogs.bicep' = {
     existingNsgId: existingNsgId
     existingFlowLogStorageAccountId: existingFlowLogStorageAccountId
     logAnalyticsWorkspaceId: logAnalyticsWorkspaceId
+    logAnalyticsworkspacecustid: logAnalyticsworkspacecustid
   }
 }

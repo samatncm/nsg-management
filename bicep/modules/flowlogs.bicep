@@ -15,8 +15,7 @@ param existingFlowLogStorageAccountId string
 
 @description('Log analytics workspace resource id')
 param logAnalyticsWorkspaceId string = ''
-
-param workspaceid string = 'f9553ac5-f7e6-4800-958e-04f70c30fa7b'
+param logAnalyticsworkspacecustid string
 var flowLogsStorageRetention = 60
 
 resource nsgFlowLog 'Microsoft.Network/networkWatchers/flowLogs@2021-02-01' = {
@@ -26,7 +25,7 @@ resource nsgFlowLog 'Microsoft.Network/networkWatchers/flowLogs@2021-02-01' = {
     enabled: true
     flowAnalyticsConfiguration: {
       networkWatcherFlowAnalyticsConfiguration: {
-        workspaceId: workspaceid
+        workspaceId: logAnalyticsworkspacecustid
         workspaceRegion: 'uksouth'
         enabled: empty(logAnalyticsWorkspaceId) ? false : true
         trafficAnalyticsInterval: 60

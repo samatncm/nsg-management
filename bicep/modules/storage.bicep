@@ -1,6 +1,6 @@
 param storageaccountname string
 param location string
-param sku string 
+param sku string = 'Standard_LRS'
 // param subnetid string
 resource storage 'Microsoft.Storage/storageAccounts@2021-06-01' = {
   name: storageaccountname

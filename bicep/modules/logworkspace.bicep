@@ -15,3 +15,5 @@ resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-03
     }
   })
 }
+output logId string = logAnalyticsWorkspace.id
+output custid string = logAnalyticsWorkspace.properties.customerId
