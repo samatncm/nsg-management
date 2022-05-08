@@ -44,8 +44,6 @@ module devnsg 'modules/nsg.bicep' = {
           sourceAddressPrefixes: object.untrusted
           sourcePortRange: '*'
           sourcePortRanges: []
-          sourceApplicationSecurityGroups: []
-          destinationApplicationSecurityGroups: []
         }
       }
     ]
